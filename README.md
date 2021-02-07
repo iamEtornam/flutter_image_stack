@@ -31,13 +31,13 @@ class MyWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 return FlutterImageStack(
-                imageList: _images,
-                showTotalCount: true,
-                totalCount: 4,
-                imageRadius: 60, // Radius of each images
-                imageCount: 3, // Maximum number of images to be shown in stack
-                imageBorderWidth: 3, // Border width around the images
-              );
+        imageList: _images,
+        showTotalCount: true,
+        totalCount: 4,
+        imageRadius: 60, // Radius of each images
+        imageCount: 3, // Maximum number of images to be shown in stack
+        imageBorderWidth: 3, // Border width around the images
+      );
   }
 }
 ```
@@ -102,7 +102,7 @@ return FlutterImageStack.widgets(
 
 ## Screenshot
 
-![Flutter Image Stack Screenshot](screenshot.png)
+![Flutter Image Stack Screenshot](https://raw.githubusercontent.com/RegNex/flutter_image_stack/main/screenshot.png)
 
 ## Contributors
 
