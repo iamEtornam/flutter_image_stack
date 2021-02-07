@@ -1,8 +1,7 @@
 name: flutter_image_stack
 description: FlutterImageStack is a pure dart package for creating image stack in Flutter. This package give you a widget to easily create image stack for your need.
 version: 0.0.1
-author:
-homepage:
+homepage: https://regnex.github.io/flutter_image_stack/
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
