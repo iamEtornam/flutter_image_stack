@@ -9,3 +9,7 @@
 ## [0.0.3] - 07-02-2021
 
 * Edit Readme
+
+## [0.0.4] - 14-03-2021
+
+* Migrate to null-safety
