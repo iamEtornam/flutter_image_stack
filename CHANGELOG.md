@@ -19,3 +19,7 @@
 * Introduced breaking change
 * Fixed layout issue
 * reverse order of items, to have left-to-right direction of items
+
+## [0.0.6] - 28-07-2021
+
+* Update Readme
