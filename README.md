@@ -34,9 +34,9 @@ return FlutterImageStack(
         imageList: _images,
         showTotalCount: true,
         totalCount: 4,
-        imageRadius: 60, // Radius of each images
-        imageCount: 3, // Maximum number of images to be shown in stack
-        imageBorderWidth: 3, // Border width around the images
+        itemRadius: 60, // Radius of each images
+        itemCount: 3, // Maximum number of images to be shown in stack
+        itemBorderWidth: 3, // Border width around the images
       );
   }
 }
@@ -62,9 +62,9 @@ return FlutterImageStack.providers(
           providers: _images,
           showTotalCount: true,
           totalCount: 4,
-          imageRadius: 60, // Radius of each images
-          imageCount: 3, // Maximum number of images to be shown in stack
-          imageBorderWidth: 3, // Border width around the images
+          itemRadius: 60, // Radius of each images
+          itemCount: 3, // Maximum number of images to be shown in stack
+          itemBorderWidth: 3, // Border width around the images
         );
   }
 }
@@ -91,9 +91,9 @@ return FlutterImageStack.widgets(
         children: _images,
         showTotalCount: true,
         totalCount: 4,
-        widgetRadius: 60, // Radius of each images
-        widgetCount: 3, // Maximum number of images to be shown in stack
-        widgetBorderWidth: 3, // Border width around the images
+        itemRadius: 60, // Radius of each images
+        itemCount: 3, // Maximum number of images to be shown in stack
+        itemBorderWidth: 3, // Border width around the images
       );
   }
 }
