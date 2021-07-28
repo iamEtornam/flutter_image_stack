@@ -13,3 +13,9 @@
 ## [0.0.4] - 14-03-2021
 
 * Migrate to null-safety
+
+## [0.0.5] - 28-07-2021
+
+* Introduced breaking change
+* Fixed layout issue
+* reverse order of items, to have left-to-right direction of items
