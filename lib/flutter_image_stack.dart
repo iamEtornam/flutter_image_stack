@@ -1,42 +1,70 @@
 library flutter_image_stack;
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 /// Creates a flutter image stack
 class FlutterImageStack extends StatelessWidget {
-  final List<String> imageList; ///This is a list of images to be displayed. This is required
-  final double? imageRadius; /// Radius of each images default is 25
-  final int? imageCount; /// Maximum number of images to be shown in stack default is 3
-  final int totalCount; /// total number of FlutterImageStack to display
-  final double? imageBorderWidth; /// Border width around the images default is 2
-  final Color? imageBorderColor; /// Color of the Border Color
-  final TextStyle extraCountTextStyle; ///extra count textstyle
-  final Color backgroundColor; /// Background color
-  final ImageSource? imageSource; /// this determine what to display eg. ImageSource.Asset, ImageSource.File, ImageSource.Network
-  final List<Widget> children; ///This is a list of widget to be displayed.
-  final double? widgetRadius; /// Radius of each widget
-  final int? widgetCount; /// Total widget count
-  final double? widgetBorderWidth;  /// Border width around the widget
-  final Color? widgetBorderColor; /// color of border
-  final List<ImageProvider> providers; ///List of image providers eg. AssetImage, FileImage, NetworkImage
-  final bool showTotalCount; /// show total count of images
 
-  /// List<string> images = ["image1Link", "image2Link", "image3Link", "image4Link"];
-  /// ImageStack(
-  ///        imageList: images,
-  ///        imageRadius: 25, // Radius of each images
-  ///        imageCount: 3, // Maximum number of images to be shown in stack
-  ///        imageBorderWidth: 3, // Border width around the images
-  ///      );
+   /// List of image urls
+  final List<String> imageList;
+
+  /// item radius for the circular image/widget
+  final double? itemRadius;
+
+ /// Count of the number of images/widgets to be shown
+  final int? itemCount;
+
+  /// Total count will be used to determine the number of circular images
+  /// to be shown along with showing the remaining count in an additional
+  /// circle
+  final int totalCount;
+
+  /// Optional field to set the circular image/widget border width
+  final double? itemBorderWidth;
+
+  /// Optional field to set the color of circular image/widget border
+  final Color? itemBorderColor;
+
+  /// The text style to apply if there is any extra count to be shown
+  final TextStyle extraCountTextStyle;
+
+  /// Set the background color of the circle
+  final Color backgroundColor;
+
+  /// Enum to define the image source.
+  ///
+  /// Describes type of the image source being sent in [imageList]
+  ///
+  /// Possible values:
+  ///  * Asset
+  ///  * Network
+  ///  * File
+  final ImageSource? imageSource;
+
+/// Custom widget list passed to render circular widgets
+  final List<Widget> children;
+
+   /// List of `ImageProvider` eg. AssetImage, FileImage, NetworkImage
+  final List<ImageProvider> providers;
+
+  /// To show the remaining count if the provided list size is less than [totalCount]
+  final bool showTotalCount;
+
+
+ /// Creates a flutter image stack widget.
+  ///
+  /// The [imageList] and [totalCount] parameters are required.
   FlutterImageStack({
     Key? key,
     required this.imageList,
-    this.imageRadius = 25,
-    this.imageCount = 3,
+    this.itemRadius = 25,
+    this.itemCount = 3,
     required this.totalCount,
-    this.imageBorderWidth = 2,
-    Color this.imageBorderColor = Colors.grey,
+    this.itemBorderWidth = 2,
+    Color this.itemBorderColor = Colors.grey,
     this.imageSource = ImageSource.Network,
     this.showTotalCount = true,
     this.extraCountTextStyle = const TextStyle(
@@ -46,25 +74,19 @@ class FlutterImageStack extends StatelessWidget {
     this.backgroundColor = Colors.white,
   })  : children = [],
         providers = [],
-        widgetBorderColor = null,
-        widgetBorderWidth = null,
-        widgetCount = null,
-        widgetRadius = null,
-        assert(imageList != null),
-        assert(extraCountTextStyle != null),
-        assert(imageBorderColor != null),
-        assert(backgroundColor != null),
-        assert(totalCount != null),
         super(key: key);
 
+  /// Creates a flutter image stack widget by passing list of custom widgets.
+  ///
+  /// The [children] and [totalCount] parameters are required.
   FlutterImageStack.widgets({
     Key? key,
     required this.children,
-    this.widgetRadius = 25,
-    this.widgetCount = 3,
+    this.itemRadius = 25,
+    this.itemCount = 3,
     required this.totalCount,
-    this.widgetBorderWidth = 2,
-    Color this.widgetBorderColor = Colors.grey,
+    this.itemBorderWidth = 2,
+    Color this.itemBorderColor = Colors.grey,
     this.showTotalCount = true,
     this.extraCountTextStyle = const TextStyle(
       color: Colors.black,
@@ -73,26 +95,20 @@ class FlutterImageStack extends StatelessWidget {
     this.backgroundColor = Colors.white,
   })  : imageList = [],
         providers = [],
-        imageBorderColor = null,
-        imageBorderWidth = null,
-        imageCount = null,
-        imageRadius = null,
         imageSource = null,
-        assert(children != null),
-        assert(extraCountTextStyle != null),
-        assert(widgetBorderColor != null),
-        assert(backgroundColor != null),
-        assert(totalCount != null),
         super(key: key);
 
+  /// Creates an flutter image stack by passing list of `ImageProvider`.
+  ///
+  /// The [providers] and [totalCount] parameters are required.
   FlutterImageStack.providers({
     Key? key,
     required this.providers,
-    this.imageRadius = 25,
-    this.imageCount = 3,
+    this.itemRadius = 25,
+    this.itemCount = 3,
     required this.totalCount,
-    this.imageBorderWidth = 2,
-    Color this.imageBorderColor = Colors.grey,
+    this.itemBorderWidth = 2,
+    Color this.itemBorderColor = Colors.grey,
     this.showTotalCount = true,
     this.extraCountTextStyle = const TextStyle(
       color: Colors.black,
@@ -101,139 +117,88 @@ class FlutterImageStack extends StatelessWidget {
     this.backgroundColor = Colors.white,
   })  : imageList = [],
         children = [],
-        widgetBorderColor = null,
-        widgetBorderWidth = null,
-        widgetCount = null,
-        widgetRadius = null,
         imageSource = null,
-        assert(providers != null),
-        assert(extraCountTextStyle != null),
-        assert(imageBorderColor != null),
-        assert(backgroundColor != null),
-        assert(totalCount != null),
         super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
-    var images = <Widget>[];
-    var widgets = <Widget>[];
-    var providersImages = <Widget>[];
-    int? _size = children.length > 0 ? widgetCount : imageCount;
-    if (imageList.isNotEmpty) {
-      images.add(circularImage(imageList[0]));
-    } else if (children.isNotEmpty) {
-      widgets.add(circularWidget(children[0]));
-    } else if (providers.isNotEmpty) {
-      providersImages.add(circularProviders(providers[0]));
-    }
-
-    if (imageList.length > 1) {
-      if (imageList.length < _size!) {
-        _size = imageList.length;
-      }
-      images.addAll(imageList
-          .sublist(1, _size)
-          .asMap()
-          .map((index, image) => MapEntry(
-        index,
-        Positioned(
-          right: 0.8 * imageRadius! * (index + 1.0),
-          child: circularImage(image),
-        ),
-      ))
-          .values
-          .toList());
-    }
-    if (children.length > 1) {
-      if (children.length < _size!) {
-        _size = children.length;
-      }
-      widgets.addAll(children
-          .sublist(1, _size)
-          .asMap()
-          .map((index, widget) => MapEntry(
-        index,
-        Positioned(
-          right: 0.8 * widgetRadius! * (index + 1.0),
-          child: circularWidget(widget),
-        ),
-      ))
-          .values
-          .toList());
-    }
-    if (providers.length > 1) {
-      if (providers.length < _size!) {
-        _size = providers.length;
-      }
-      providersImages.addAll(providers
-          .sublist(1, _size)
-          .asMap()
-          .map((index, data) => MapEntry(
-        index,
-        Positioned(
-          right: 0.8 * imageRadius! * (index + 1.0),
-          child: circularProviders(data),
-        ),
-      ))
-          .values
-          .toList());
-    }
-    return Container(
+    var items = List.from(imageList)..addAll(children)..addAll(providers);
+    int size = min(itemCount!, items.length);
+    var widgetList = items
+        .sublist(0, size)
+        .asMap()
+        .map((index, value) => MapEntry(
+            index,
+            Padding(
+              padding: EdgeInsets.only(left: 0.7 * itemRadius! * index),
+              child: circularItem(value),
+            )))
+        .values
+        .toList()
+        .reversed
+        .toList();
+    return FittedBox(
       child: Row(
         children: <Widget>[
-          images.isNotEmpty || widgets.isNotEmpty || providersImages.isNotEmpty
+          widgetList.isNotEmpty
               ? Stack(
-                clipBehavior: Clip.antiAlias,
-            textDirection: TextDirection.rtl,
-            children: children.length > 0
-                ? widgets
-                : providers.length > 0 ? providersImages : images,
-          )
-              : SizedBox(),
+                  clipBehavior: Clip.none,
+                  children: widgetList,
+                )
+              : SizedBox.shrink(),
           Container(
-            margin: EdgeInsets.only(left: 5),
-            child: totalCount - images.length > 0
-                ? showTotalCount
-                ? Container(
-              constraints: BoxConstraints(minWidth: imageRadius!),
-              padding: EdgeInsets.all(3),
-              height: imageRadius,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(imageRadius!),
-                  border: Border.all(
-                      color: imageBorderColor!,
-                      width: imageBorderWidth!),
-                  color: backgroundColor),
-              child: Center(
-                child: Text(
-                  (totalCount - images.length).toString(),
-                  textAlign: TextAlign.center,
-                  style: extraCountTextStyle,
-                ),
-              ),
-            )
-                : SizedBox()
-                : Container(),
-          ),
+              child: showTotalCount && totalCount - widgetList.length > 0
+                  ? Container(
+                      constraints: BoxConstraints(
+                          minWidth: itemRadius! - itemBorderWidth!),
+                      padding: EdgeInsets.all(3),
+                      height: (itemRadius! - itemBorderWidth!),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                              itemRadius! - itemBorderWidth!),
+                          border: Border.all(
+                              color: itemBorderColor!, width: itemBorderWidth!),
+                          color: backgroundColor),
+                      child: Center(
+                        child: Text(
+                          "+${totalCount - widgetList.length}",
+                          textAlign: TextAlign.center,
+                          style: extraCountTextStyle,
+                        ),
+                      ),
+                    )
+                  : SizedBox()),
         ],
       ),
     );
   }
 
+  Widget circularItem(dynamic item) {
+    if (item is ImageProvider) {
+      return circularProviders(item);
+    } else if (item is Widget) {
+      return circularWidget(item);
+    } else if (item is String) {
+      return circularImage(item);
+    }
+    return Container();
+  }
+
   circularWidget(Widget widget) {
     return Container(
-      height: widgetRadius,
-      width: widgetRadius,
+      height: itemRadius,
+      width: itemRadius,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: backgroundColor,
         border: Border.all(
-          color: widgetBorderColor!,
-          width: widgetBorderWidth!,
+          color: itemBorderColor!,
+          width: itemBorderWidth!,
         ),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(widgetRadius!),
+        borderRadius: BorderRadius.circular(itemRadius!),
         child: widget,
       ),
     );
@@ -241,13 +206,13 @@ class FlutterImageStack extends StatelessWidget {
 
   Widget circularImage(String imageUrl) {
     return Container(
-      height: imageRadius,
-      width: imageRadius,
+      height: itemRadius,
+      width: itemRadius,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
           color: Colors.white,
-          width: imageBorderWidth!,
+          width: itemBorderWidth!,
         ),
       ),
       child: Container(
@@ -265,13 +230,13 @@ class FlutterImageStack extends StatelessWidget {
 
   Widget circularProviders(ImageProvider imageProvider) {
     return Container(
-      height: imageRadius,
-      width: imageRadius,
+      height: itemRadius,
+      width: itemRadius,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
           color: Colors.white,
-          width: imageBorderWidth!,
+          width: itemBorderWidth!,
         ),
       ),
       child: Container(
