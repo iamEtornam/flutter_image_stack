@@ -3,18 +3,16 @@ library flutter_image_stack;
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 /// Creates a flutter image stack
 class FlutterImageStack extends StatelessWidget {
-
-   /// List of image urls
+  /// List of image urls
   final List<String> imageList;
 
   /// item radius for the circular image/widget
   final double? itemRadius;
 
- /// Count of the number of images/widgets to be shown
+  /// Count of the number of images/widgets to be shown
   final int? itemCount;
 
   /// Total count will be used to determine the number of circular images
@@ -44,17 +42,16 @@ class FlutterImageStack extends StatelessWidget {
   ///  * File
   final ImageSource? imageSource;
 
-/// Custom widget list passed to render circular widgets
+  /// Custom widget list passed to render circular widgets
   final List<Widget> children;
 
-   /// List of `ImageProvider` eg. AssetImage, FileImage, NetworkImage
+  /// List of `ImageProvider` eg. AssetImage, FileImage, NetworkImage
   final List<ImageProvider> providers;
 
   /// To show the remaining count if the provided list size is less than [totalCount]
   final bool showTotalCount;
 
-
- /// Creates a flutter image stack widget.
+  /// Creates a flutter image stack widget.
   ///
   /// The [imageList] and [totalCount] parameters are required.
   FlutterImageStack({
@@ -120,10 +117,11 @@ class FlutterImageStack extends StatelessWidget {
         imageSource = null,
         super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
-    var items = List.from(imageList)..addAll(children)..addAll(providers);
+    var items = List.from(imageList)
+      ..addAll(children)
+      ..addAll(providers);
     int size = min(itemCount!, items.length);
     var widgetList = items
         .sublist(0, size)
@@ -150,15 +148,12 @@ class FlutterImageStack extends StatelessWidget {
           Container(
               child: showTotalCount && totalCount - widgetList.length > 0
                   ? Container(
-                      constraints: BoxConstraints(
-                          minWidth: itemRadius! - itemBorderWidth!),
+                      constraints: BoxConstraints(minWidth: itemRadius! - itemBorderWidth!),
                       padding: EdgeInsets.all(3),
                       height: (itemRadius! - itemBorderWidth!),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                              itemRadius! - itemBorderWidth!),
-                          border: Border.all(
-                              color: itemBorderColor!, width: itemBorderWidth!),
+                          borderRadius: BorderRadius.circular(itemRadius! - itemBorderWidth!),
+                          border: Border.all(color: itemBorderColor!, width: itemBorderWidth!),
                           color: backgroundColor),
                       child: Center(
                         child: Text(
