@@ -62,7 +62,7 @@ class FlutterImageStack extends StatelessWidget {
     required this.totalCount,
     this.itemBorderWidth = 2,
     Color this.itemBorderColor = Colors.grey,
-    this.imageSource = ImageSource.Network,
+    this.imageSource = ImageSource.network,
     this.showTotalCount = true,
     this.extraCountTextStyle = const TextStyle(
       color: Colors.black,
@@ -144,12 +144,12 @@ class FlutterImageStack extends StatelessWidget {
                   clipBehavior: Clip.none,
                   children: widgetList,
                 )
-              : SizedBox.shrink(),
+              : const SizedBox.shrink(),
           Container(
               child: showTotalCount && totalCount - widgetList.length > 0
                   ? Container(
                       constraints: BoxConstraints(minWidth: itemRadius! - itemBorderWidth!),
-                      padding: EdgeInsets.all(3),
+                      padding: const EdgeInsets.all(3),
                       height: (itemRadius! - itemBorderWidth!),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(itemRadius! - itemBorderWidth!),
@@ -163,7 +163,7 @@ class FlutterImageStack extends StatelessWidget {
                         ),
                       ),
                     )
-                  : SizedBox()),
+                  : const SizedBox()),
         ],
       ),
     );
@@ -248,13 +248,13 @@ class FlutterImageStack extends StatelessWidget {
   }
 
   imageProvider(imageUrl) {
-    if (this.imageSource == ImageSource.Asset) {
+    if (imageSource == ImageSource.asset) {
       return AssetImage(imageUrl);
-    } else if (this.imageSource == ImageSource.File) {
+    } else if (imageSource == ImageSource.file) {
       return FileImage(imageUrl);
     }
     return NetworkImage(imageUrl);
   }
 }
 
-enum ImageSource { Asset, Network, File }
+enum ImageSource { asset, network, file }
