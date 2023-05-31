@@ -29,6 +29,8 @@
 .pub-cache/
 .pub/
 build/
+.fvm/
+.vscode/
 
 # Android related
 **/android/**/gradle-wrapper.jar
