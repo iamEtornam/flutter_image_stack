@@ -104,6 +104,3 @@ return FlutterImageStack.widgets(
 
 ![Flutter Image Stack Screenshot](https://raw.githubusercontent.com/RegNex/flutter_image_stack/main/screenshot.png)
 
-## Contributors
-
-- [Etornam Sunu Bright](https://github.com/RegNex)
